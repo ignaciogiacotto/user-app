@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
@@ -11,9 +11,12 @@ import { CommonModule } from '@angular/common';
 })
 export class UserFormComponent {
 
-  user: User;
+  @Input() user: User;
+
+  @Output() openEventEmitter = new EventEmitter();
 
   @Output() newUserEventEmitter: EventEmitter<User> = new EventEmitter();
+
 
   constructor(){
     this.user = new User();
@@ -26,5 +29,14 @@ export class UserFormComponent {
     }
     userForm.reset();
     userForm.resetForm();
+  }
+
+  onClear(userForm: NgForm): void{
+    userForm.reset();
+    userForm.resetForm();
+  }
+
+  onOpen(){
+    this.openEventEmitter.emit();
   }
 }

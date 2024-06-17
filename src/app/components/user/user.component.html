@@ -5,11 +5,12 @@
                     <thead>
                         <tr>
                             <!-- <th>Id</th> -->
-                            <th>Name</th>
-                            <th>Lastname</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
                             <th>Email</th>
                             <th>Username</th>
-                            <th>Remove</th>
+                            <th>Eliminar</th>
+                            <th>Editar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,7 +26,13 @@
                                     (click)="onRemoveUser(user.id)">
                                         Eliminar
                                     </button>
-                                </td>   
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-sm"
+                                    (click)="onSelectedUser(user)">
+                                        Editar
+                                    </button>
+                                </td>
                             </tr>
                         }
                     </tbody>
