@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Formulario para {{ user.id > 0 ? "editar" : "crear" }} usuario</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="onOpen()"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="onOpen(userForm)"></button>
             </div>
             <div class="modal-body">
                 <form (ngSubmit)="onSubmit(userForm)" #userForm="ngForm">
@@ -116,7 +116,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onOpen()">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onOpen(userForm)">
                         Close
                     </button>
                 </div>

@@ -36,7 +36,9 @@ export class UserFormComponent {
     userForm.resetForm();
   }
 
-  onOpen(){
+  onOpen(userForm: NgForm){
     this.openEventEmitter.emit();
+    userForm.reset();
+    userForm.resetForm();
   }
 }
