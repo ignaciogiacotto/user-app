@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'user-app',
@@ -39,11 +40,18 @@ export class UserAppComponent implements OnInit {
   addUser(){
     this.sharingData.newUserEventEmitter.subscribe( user =>{
       if(user.id > 0){
-        this.users = this.users.map( u => (u.id == user.id) ? {... user} : u);
+        this.service.update(user).subscribe(userUpdated =>{
+          this.users = this.users.map( u => (u.id == userUpdated.id) ? {... userUpdated} : u);
+          this.router.navigate(['/users'], {state: { users: this.users} });
+        })
+
       }else{
-        this.users = [... this.users, {... user, id: new Date().getTime() }];
+        this.service.create(user).subscribe(userNew =>{
+          this.users = [... this.users, {... userNew}];
+          this.router.navigate(['/users'], {state: {users: this.users} });
+        })
       }
-      this.router.navigate(['/users'], { state: { users: this.users } });
+
       Swal.fire({
         title: "Guardado",
         text: "Usuario guardado con exito",
@@ -64,10 +72,13 @@ export class UserAppComponent implements OnInit {
         confirmButtonText: "Si, eliminar"
       }).then((result) => {
         if (result.isConfirmed) {
-          this.users = this.users.filter(user => user.id != id)
-          this.router.navigate(['/users/create'], { skipLocationChange: true }).then( () => {
-            this.router.navigate(['/users'], { state: { users: this.users } });
-          });
+
+          this.service.remove(id).subscribe(()=> {
+            this.users = this.users.filter(user => user.id != id)
+            this.router.navigate(['/users/create'], { skipLocationChange: true }).then( () => {
+              this.router.navigate(['/users'], {state: { users: this.users} });
+            });
+          })
 
           Swal.fire({
             title: "Eliminado",
