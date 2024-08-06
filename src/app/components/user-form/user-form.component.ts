@@ -15,6 +15,7 @@ import { UserService } from '../../services/user.service';
 export class UserFormComponent implements OnInit{
 
   user: User;
+  errors: any = {};
 
   constructor(
     private sharingData: SharingDataService, 
@@ -24,7 +25,10 @@ export class UserFormComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.sharingData.errorsUserFormEventEmitter.subscribe(errors => this.errors = errors);
+
     this.sharingData.selectUserEventEmitter.subscribe(user => this.user = user);//OP1) Con esta opcion espero la respuesta de datos de mi estado de Angular
+    
     this.route.paramMap.subscribe(params => {
       const id: number = +(params.get('id') || '0');
       if(id > 0){
@@ -35,12 +39,12 @@ export class UserFormComponent implements OnInit{
   }
 
   onSubmit(userForm: NgForm): void{
-    if(userForm.valid){
+    //if(userForm.valid){
       this.sharingData.newUserEventEmitter.emit(this.user);
       console.log(this.user);
-    }
-    userForm.reset();
-    userForm.resetForm();
+    //}
+    // userForm.reset();
+    // userForm.resetForm();
   }
 
   onClear(userForm: NgForm): void{

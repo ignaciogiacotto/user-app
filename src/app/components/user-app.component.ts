@@ -5,7 +5,6 @@ import Swal from 'sweetalert2';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
-import { state } from '@angular/animations';
 
 @Component({
   selector: 'user-app',
@@ -40,23 +39,43 @@ export class UserAppComponent implements OnInit {
   addUser(){
     this.sharingData.newUserEventEmitter.subscribe( user =>{
       if(user.id > 0){
-        this.service.update(user).subscribe(userUpdated =>{
+        this.service.update(user).subscribe( 
+          {next: userUpdated => {
           this.users = this.users.map( u => (u.id == userUpdated.id) ? {... userUpdated} : u);
           this.router.navigate(['/users'], {state: { users: this.users} });
-        })
+          
+          Swal.fire({
+            title: "Actualizado",
+            text: "Usuario editado con exito",
+            icon: "success"
+          });
+          },
+          error: (err) => {
+            if(err.status == 400){
+              this.sharingData.errorsUserFormEventEmitter.emit(err.error);
+            }
+          }
+    })
 
       }else{
-        this.service.create(user).subscribe(userNew =>{
+        this.service.create(user).subscribe(
+          {next: userNew => {
           this.users = [... this.users, {... userNew}];
           this.router.navigate(['/users'], {state: {users: this.users} });
+          
+          Swal.fire({
+            title: "Nuevo usuario Creado",
+            text: "Usuario creado con exito",
+            icon: "success"
+          });
+          },
+          error: (err) => {
+            if(err.status == 400){
+              this.sharingData.errorsUserFormEventEmitter.emit(err.error);
+            }
+          }
         })
       }
-
-      Swal.fire({
-        title: "Guardado",
-        text: "Usuario guardado con exito",
-        icon: "success"
-      });
     })
   }
 
