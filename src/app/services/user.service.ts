@@ -16,7 +16,10 @@ export class UserService {
 
   findAll(): Observable<User[]>{
     return this.http.get<User[]>(this.url);
+  }
 
+  findAllPageable(page: number): Observable<any>{
+    return this.http.get<any>(`${this.url}/page/${page}`);
   }
   
   findById(id: number): Observable<User>{
