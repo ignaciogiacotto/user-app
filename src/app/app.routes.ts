@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { UserComponent } from './components/user/user.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
+import { AuthComponent } from './components/auth/auth.component';
 
 export const routes: Routes = [
     {
@@ -24,4 +25,8 @@ export const routes: Routes = [
         path: 'users/edit/:id',
         component: UserFormComponent,
     },
+    {
+        path: 'login',
+        component: AuthComponent,
+    }
 ];
