@@ -10,14 +10,20 @@
                     <a class="nav-link active" aria-current="page" [routerLink]="['/users']"
                     [state]="{users, paginator}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/users/create']">Crear usuario</a>
-                </li>
+                @if (admin) {
+                    <li class="nav-item">
+                        <a class="nav-link" [routerLink]="['/users/create']">Crear usuario</a>
+                    </li>
+                }
             </ul>
         </div>
         <div class="collapse navbar-collapse justify-content-end" id="navbarAuth">
             <span class="nav-item nav-link text-primary mx-3">
-                <a class="btn btn-outline-primary" [routerLink]="['/login']">Registrate</a>
+                @if (login.isAuth) {
+                    {{ login.user.username }}
+                } @else {
+                    <a class="btn btn-outline-primary" [routerLink]="['/login']">Registrate</a>
+                }
             </span>
         </div>
     </div>
