@@ -18,8 +18,6 @@ import { add, find, findAll, remove, setPaginator, update } from '../store/users
 })
 export class UserAppComponent implements OnInit {
 
-  users: User[] = [];
-  paginator: any = {};
   user!: User;
 
   constructor( 
@@ -30,9 +28,7 @@ export class UserAppComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute){ 
       this.store.select('users').subscribe(state =>{
-        this.users = state.users;
-        this.paginator = state.paginator;
-        this.user = state.user;
+        this.user = {... state.user};
       })
     }
 
@@ -95,9 +91,8 @@ export class UserAppComponent implements OnInit {
       if(user.id > 0){
         this.service.update(user).subscribe( 
           {next: userUpdated => {
-          // this.users = this.users.map( u => (u.id == userUpdated.id) ? {... userUpdated} : u);
           this.store.dispatch(update({ userUpdated }))
-          this.router.navigate(['/users'], {state: { users: this.users, paginator: this.paginator} });
+          this.router.navigate(['/users']);
           
           Swal.fire({
             title: "Actualizado",
@@ -115,9 +110,8 @@ export class UserAppComponent implements OnInit {
       }else{
         this.service.create(user).subscribe(
           {next: userNew => {
-          // this.users = [... this.users, {... userNew}];
           this.store.dispatch(add({ userNew }))
-          this.router.navigate(['/users'], {state: {users: this.users, paginator: this.paginator} });
+          this.router.navigate(['/users']);
           
           Swal.fire({
             title: "Nuevo usuario Creado",
@@ -149,10 +143,9 @@ export class UserAppComponent implements OnInit {
         if (result.isConfirmed) {
 
           this.service.remove(id).subscribe(()=> {
-            // this.users = this.users.filter(user => user.id != id)
             this.store.dispatch(remove({ id }))
             this.router.navigate(['/users/create'], { skipLocationChange: true }).then( () => {
-              this.router.navigate(['/users'], {state: { users: this.users, paginator: this.paginator} });
+              this.router.navigate(['/users']);
             });
           })
 

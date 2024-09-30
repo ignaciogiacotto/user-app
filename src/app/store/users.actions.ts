@@ -1,7 +1,10 @@
 import { createAction, props } from "@ngrx/store";
 import { User } from "../models/user";
 
+export const load = createAction('load', props<{ page: number }>())
+
 export const findAll = createAction('findAll', props<{ users: User[] }>());
+export const findAllPageable = createAction('findAllPageable', props<{ users: User[], paginator: any }>());
 export const setPaginator = createAction('setPaginator', props<{ paginator: any }>());
 export const find = createAction('find', props<{ id: number }>());
 
