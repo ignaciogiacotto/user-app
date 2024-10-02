@@ -42,12 +42,7 @@ export class UserComponent implements OnInit{
 
 
   ngOnInit(): void {
-    if(this.users == undefined || this.users == null || this.users.length == 0){
-      this.route.paramMap.subscribe(params => {
-        const page = +(params.get('page') || '0');
-        this.store.dispatch(load({ page }));
-      }) //Paginacion
-    }
+      this.route.paramMap.subscribe(params => this.store.dispatch(load({ page: +(params.get('page') || '0') }))) //Paginacion
   }
 
   onRemoveUser(id: number): void{
