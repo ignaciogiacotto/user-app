@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { UserService } from "../services/user.service";
-import { add, addSuccess, findAll, findAllPageable, load, setErrors, setPaginator } from "./users.actions";
+import { add, addSuccess, findAll, findAllPageable, load, setErrors, setPaginator, update, updateSuccess } from "./users.actions";
 import { catchError, EMPTY, exhaustMap, map, of, tap } from "rxjs";
 import { User } from "../models/user";
 import Swal from "sweetalert2";
@@ -40,9 +40,36 @@ export class UsersEffects {
         )
     );
 
+    updateUser$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(update),
+            exhaustMap(action => this.service.update(action.userUpdated)
+                .pipe(
+                    map( userUpdated => updateSuccess({ userUpdated }) ),
+                    catchError( error => (error.status == 400) ? of(setErrors({ errors: error.error})) : EMPTY
+                    )
+                )
+            )
+        )
+    );
+
     addSuccesUser$ = createEffect(
         () => this.actions$.pipe(
             ofType(addSuccess),
+            tap(() => {
+                this.router.navigate(['/users']);
+                Swal.fire({
+                title: "Creado",
+                text: "Usuario creado con exito",
+                icon: "success"
+                });
+            })
+        ), {dispatch: false}
+    );
+
+    updateSuccesUser$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(updateSuccess),
             tap(() => {
                 this.router.navigate(['/users']);
                 Swal.fire({
@@ -52,7 +79,7 @@ export class UsersEffects {
                 });
             })
         ), {dispatch: false}
-    )
+    );
 
     constructor (
         private actions$: Actions, 

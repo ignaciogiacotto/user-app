@@ -1,13 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
-import { SharingDataService } from '../../services/sharing-data.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { state } from '@angular/animations';
-import { add } from '../../store/users.actions';
+import { add, find, resetUser, update } from '../../store/users.actions';
 
 @Component({
   selector: 'user-form',
@@ -22,9 +19,7 @@ export class UserFormComponent implements OnInit{
 
   constructor(
     private store: Store<{ users: any}>,
-    private sharingData: SharingDataService, 
-    private route: ActivatedRoute, 
-    private service: UserService){
+    private route: ActivatedRoute){
     this.user = new User();
     
     this.store.select('users').subscribe(state => {
@@ -34,27 +29,22 @@ export class UserFormComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.sharingData.errorsUserFormEventEmitter.subscribe(errors => this.errors = errors);
 
-    this.sharingData.selectUserEventEmitter.subscribe(user => this.user = user);//OP1) Con esta opcion espero la respuesta de datos de mi estado de Angular
-    
     this.route.paramMap.subscribe(params => {
       const id: number = +(params.get('id') || '0');
       if(id > 0){
-        this.sharingData.findUserByIdEventEmitter.emit(id);
-        // this.service.findById(id).subscribe(user => this.user = this.user) //OP2) Con esta opcion voy a buscar el id al backend
+        this.store.dispatch(find({ id }))
       }
     });
   }
 
   onSubmit(userForm: NgForm): void{
-    this.store.dispatch(add({userNew: this.user}))
-    //if(userForm.valid){
-      // this.sharingData.newUserEventEmitter.emit(this.user);
-      // console.log(this.user);
-    //}
-    // userForm.reset();
-    // userForm.resetForm();
+    if (this.user.id > 0){
+      this.store.dispatch(update({userUpdated: this.user}))
+    }else{
+      this.store.dispatch(add({userNew: this.user}))
+    }
+    this.store.dispatch(resetUser());
   }
 
   onClear(userForm: NgForm): void{
