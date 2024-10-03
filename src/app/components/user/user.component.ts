@@ -1,13 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { UserService } from '../../services/user.service';
-import { SharingDataService } from '../../services/sharing-data.service';
 import { PaginatorComponent } from '../paginator/paginator.component';
 import { AuthService } from '../../services/auth.service';
 import { Store } from '@ngrx/store';
-import { state } from '@angular/animations';
-import { load } from '../../store/users.actions';
+import { load, remove } from '../../store/users.actions';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'user',
@@ -28,8 +26,6 @@ export class UserComponent implements OnInit{
   constructor(
     private store: Store<{ users: any}>,
     private router: Router,
-    private service: UserService,
-    private sharingData: SharingDataService,
     private route: ActivatedRoute,
     private authService: AuthService) {
 
@@ -45,8 +41,20 @@ export class UserComponent implements OnInit{
       this.route.paramMap.subscribe(params => this.store.dispatch(load({ page: +(params.get('page') || '0') }))) //Paginacion
   }
 
-  onRemoveUser(id: number): void{
-  this.sharingData.idUserEventEmitter.emit(id);
+  onRemoveUser(id: number): void{ 
+    Swal.fire({
+      title: "Estas seguro de eliminar el usuario?",
+      text: "No podrás deshacer este cambio",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, eliminar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+          this.store.dispatch(remove({ id }));
+        }
+    });
   }
 
   onSelectedUser(user: User): void{

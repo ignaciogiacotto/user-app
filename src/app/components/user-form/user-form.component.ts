@@ -30,6 +30,8 @@ export class UserFormComponent implements OnInit{
 
   ngOnInit(): void {
 
+    
+    this.store.dispatch(resetUser());
     this.route.paramMap.subscribe(params => {
       const id: number = +(params.get('id') || '0');
       if(id > 0){
@@ -39,15 +41,16 @@ export class UserFormComponent implements OnInit{
   }
 
   onSubmit(userForm: NgForm): void{
+
     if (this.user.id > 0){
       this.store.dispatch(update({userUpdated: this.user}))
     }else{
       this.store.dispatch(add({userNew: this.user}))
     }
-    this.store.dispatch(resetUser());
   }
 
   onClear(userForm: NgForm): void{
+    this.store.dispatch(resetUser());
     userForm.reset();
     userForm.resetForm();
   }
