@@ -36,15 +36,14 @@ export class UserAppComponent implements OnInit {
         next: response => {
           const token = response.token;
           const payload = this.authService.getPayload(token);
-          const user = { username: payload.sub };
-          const login = {
-            user,
+
+          this.authService.token = token;
+          this.authService.user = {
+            user: {username: payload.sub},
             isAuth: true,
             isAdmin: payload.isAdmin
-          };
-          this.authService.token = token;
-          this.authService.user = login;
-          this.router.navigate(['/users/page/0']);
+          }
+          this.router.navigate(['/users']);
         },
         error: error => {
           if(error.status == 401){
