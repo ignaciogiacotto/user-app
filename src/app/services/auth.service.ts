@@ -26,7 +26,6 @@ export class AuthService {
   }
 
   set user(user: any){
-    this.store.dispatch(login({login: user}));
     sessionStorage.setItem('login', JSON.stringify(user));
   }
 
