@@ -4,7 +4,9 @@ import { Router } from "@angular/router";
 import { catchError, exhaustMap, map, of, tap } from "rxjs";
 import { login, loginError, loginSuccess } from "./auth.actions";
 import Swal from "sweetalert2";
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class AuthEffects {
 
     login$ =  createEffect(() => this.actions$.pipe(
