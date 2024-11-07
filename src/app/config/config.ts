@@ -1,0 +1,1 @@
+export const BACKEND_URL = "ec2-54-198-192-201.compute-1.amazonaws.com:8080";
