@@ -10,14 +10,16 @@ export const usersReducer = createReducer(
         users,
         paginator: {},
         user,
-        errors: {}
+        errors: {},
+        loading: true
     },
     on(resetUser, (state) => (
         {
         users: state.users,
         paginator: state.paginator,
         user: {... user},
-        errors: {}
+        errors: {},
+        loading: state.loading
         }
     )),
     on(findAll, (state, { users }) => (
@@ -25,7 +27,8 @@ export const usersReducer = createReducer(
             users: [...users],
             paginator: state.paginator,
             user: state.user,
-            errors: state.errors
+            errors: state.errors,
+            loading: false
         }
     )),
     on(findAllPageable, (state, { users, paginator }) => (
@@ -33,7 +36,8 @@ export const usersReducer = createReducer(
             users: [...users],
             paginator: {... paginator},
             user: state.user,
-            errors: state.errors
+            errors: state.errors,
+            loading: false
         }
     )),
     on(find, (state, { id }) => (
@@ -41,7 +45,8 @@ export const usersReducer = createReducer(
             users: state.users,
             paginator: state.paginator,
             user: state.users.find(user => user.id == id) || new User(),
-            errors: state.errors
+            errors: state.errors,
+            loading: state.loading
         }
     )),
     on(setPaginator, (state, { paginator }) => (
@@ -49,7 +54,8 @@ export const usersReducer = createReducer(
             users: state.users,
             paginator: { ...paginator },
             user: state.user,
-            errors: state.errors
+            errors: state.errors,
+            loading: state.loading
         }
     )),
     on(addSuccess, (state, { userNew }) => (
@@ -57,7 +63,8 @@ export const usersReducer = createReducer(
             users:  [...state.users, { ...userNew }],
             paginator: state.paginator,
             user: {... user},
-            errors: {}
+            errors: {},
+            loading: state.loading
         }
     )),
     on(updateSuccess, (state, { userUpdated }) => (
@@ -65,7 +72,8 @@ export const usersReducer = createReducer(
             users: state.users.map(u => (u.id == userUpdated.id) ? { ...userUpdated } : u),
             paginator: state.paginator,
             user: {... user},
-            errors: {}
+            errors: {},
+            loading: state.loading
         }
     )),
     on(removeSuccess, (state, { id }) => (
@@ -73,7 +81,8 @@ export const usersReducer = createReducer(
             users: state.users.filter(user => user.id != id),
             paginator: state.paginator,
             user: state.user,
-            errors: state.errors
+            errors: state.errors,
+            loading: state.loading
         }
     )),
     on(setErrors, (state, { userForm, errors }) =>(
@@ -81,7 +90,8 @@ export const usersReducer = createReducer(
             users: state.users,
             paginator: state.paginator,
             user: {...userForm},
-            errors: {... errors}
+            errors: {... errors},
+            loading: state.loading
         }
     ))
 )

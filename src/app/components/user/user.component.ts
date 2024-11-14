@@ -18,10 +18,9 @@ export class UserComponent implements OnInit{
   title: string = 'Lista de usuarios'
 
   users: User[] = [];
-
   paginator: any = {};
-
   pageUrl : string = '/users/page'
+  loading: boolean = true;
 
   constructor(
     private store: Store<{ users: any}>,
@@ -32,6 +31,7 @@ export class UserComponent implements OnInit{
       this.store.select('users').subscribe(state => {
         this.users = state.users;
         this.paginator = state.paginator;
+        this.loading = state.loading;
       });
 
     }

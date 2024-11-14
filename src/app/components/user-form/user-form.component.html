@@ -117,6 +117,14 @@
                             } -->
                         </div>
                     }
+
+                    <div class="form-check">
+                        <input type="checkbox"
+                        [(ngModel)]="user.admin"
+                        name="admin"
+                        class="form-check-input">
+                        <label class="form-check-label">Admin</label>
+                    </div>
                     <div>
                         <button
                         type="submit"

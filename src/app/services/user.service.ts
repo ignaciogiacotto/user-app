@@ -11,7 +11,7 @@ export class UserService {
 
   private users: User[] = [];
 
-  private url: string = `${BACKEND_URL}api/users`;
+  private url: string = `${BACKEND_URL}/api/users`;
 
   constructor(private http: HttpClient) { }
 
